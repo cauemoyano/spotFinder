@@ -20,7 +20,8 @@ const Map = () => {
     [51.504, -0.09],
     [51.504, -0.08],
   ];
-  function MyComponent() {
+
+  const EventsComponent = () => {
     const map = useMapEvents({
       dragend: (e) => {
         console.log("mapCenter", e.target.getCenter());
@@ -28,7 +29,8 @@ const Map = () => {
       },
     });
     return null;
-  }
+  };
+
   return (
     <div>
       <MapContainer
@@ -53,7 +55,7 @@ const Map = () => {
             </Marker>
           );
         })}
-        <MyComponent />
+        <EventsComponent />
       </MapContainer>
     </div>
   );
