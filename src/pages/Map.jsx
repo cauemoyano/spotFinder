@@ -1,18 +1,16 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
-import {
-  MapContainer,
-  TileLayer,
-  /* Marker,
-  Popup, */
-  useMapEvents,
-} from "react-leaflet";
+import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 
 import { iconCustom } from "../Map/Icon";
 
 import Marker from "../Map/Marker";
 
-const Map = () => {
+import { connect } from "react-redux";
+
+const Map = ({ data }) => {
+  console.log(data);
+  const { lat, lon } = data;
   const positions = [
     [51.505, -0.09],
     [51.504, -0.09],
@@ -32,7 +30,7 @@ const Map = () => {
   return (
     <div>
       <MapContainer
-        center={[51.505, -0.49]}
+        center={[lat, lon]}
         zoom={13}
         minZoom={10}
         scrollWheelZoom={true}
@@ -52,4 +50,10 @@ const Map = () => {
   );
 };
 
-export default Map;
+const mapStateToProps = (state) => {
+  return {
+    data: state.map.data,
+  };
+};
+
+export default connect(mapStateToProps)(Map);
