@@ -6,6 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { setMapData } from "../../redux/Map/map.actions";
 
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     border: "1px solid",
@@ -22,9 +24,11 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomPopper = (props) => {
   const classes = useStyles();
+  let history = useHistory();
   const { open, anchorEl, suggestions, setMapData } = props;
   const handleClick = () => {
     setMapData(suggestions);
+    history.push("/map");
   };
   return (
     <Popper

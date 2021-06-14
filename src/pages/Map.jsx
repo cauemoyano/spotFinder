@@ -3,18 +3,16 @@ import "leaflet/dist/leaflet.css";
 import {
   MapContainer,
   TileLayer,
-  Marker,
-  Popup,
+  /* Marker,
+  Popup, */
   useMapEvents,
 } from "react-leaflet";
 
-import { iconCustom } from "./Icon";
-import CustomPopUp from "./CustomPopUp";
+import { iconCustom } from "../Map/Icon";
 
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import Marker from "../Map/Marker";
 
 const Map = () => {
-  const theme = createMuiTheme({ palette: { main: "#FB8C00" } });
   const positions = [
     [51.505, -0.09],
     [51.504, -0.09],
@@ -44,16 +42,9 @@ const Map = () => {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
         {positions.map((position, index) => {
-          return (
-            <Marker position={position} icon={iconCustom} key={index}>
-              <Popup>
-                <MuiThemeProvider theme={theme}>
-                  <CustomPopUp />
-                </MuiThemeProvider>
-              </Popup>
-            </Marker>
-          );
+          return <Marker position={position} icon={iconCustom} key={index} />;
         })}
         <EventsComponent />
       </MapContainer>
