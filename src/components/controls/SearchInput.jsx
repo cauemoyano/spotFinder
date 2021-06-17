@@ -20,7 +20,9 @@ class SearchInput extends Component {
   handleChange = (e) => {
     const checkValueLength = () => {
       if (this.state.value.length > 2) {
-        fetchData(this.state.value).then((data) => {
+        fetchData(
+          `https://api.locationiq.com/v1/autocomplete.php?key=${process.env.REACT_APP_LOCATIONIQ_TOKEN}&q=${this.state.value}&limit=5&tag=place:city`
+        ).then((data) => {
           if (data.error) return;
           this.setState({
             ...this.state,

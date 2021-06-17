@@ -1,4 +1,4 @@
-import { INCREMENT, DECREMENT, SETMAPDATA } from "./map.types";
+import { INCREMENT, SETMAPDATA, SETBOUNDS } from "./map.types";
 
 export const increaseCounter = () => {
   return {
@@ -6,14 +6,14 @@ export const increaseCounter = () => {
   };
 };
 
-export const decreaseCounter = () => {
+export const setBounds = (bounds) => {
   return {
-    type: DECREMENT,
+    type: SETBOUNDS,
+    payload: bounds,
   };
 };
 
 export const setMapData = (data) => {
-  console.log(data);
   return {
     type: SETMAPDATA,
     payload: data,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 
@@ -7,21 +7,41 @@ import { iconCustom } from "../Map/Icon";
 import Marker from "../Map/Marker";
 
 import { connect } from "react-redux";
+import { setBounds } from "../redux/Map/map.actions";
 
-const Map = ({ data }) => {
-  console.log(data);
+import { getAttractions } from "../utils/getAttractions";
+
+const Map = ({ data, setBounds, bounds }) => {
   const { lat, lon } = data;
   const positions = [
-    [51.505, -0.09],
+    /*  [51.505, -0.09],
     [51.504, -0.09],
-    [51.504, -0.08],
+    [51.504, -0.08], */
   ];
+
+  useEffect(() => {
+    if (bounds.length === 0) return;
+    /* const {
+      _northEast: { lat: maxLat, lng: maxLon },
+      _southWest: { lat: minLat, lng: minLon },
+    } = bounds; */
+    getAttractions(bounds);
+    /* fetchData(
+      `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&rate=3&format=geojson&limit=5000&apikey=5ae2e3f221c38a28845f05b6484f463aeb66bd736d2d3ecdb85a6368`
+    ).then((data) => console.log(data)); */
+  }, [bounds]);
 
   const EventsComponent = () => {
     const map = useMapEvents({
       dragend: (e) => {
         console.log("mapCenter", e.target.getCenter());
         console.log("map bounds", e.target.getBounds());
+        setBounds(e.target.getBounds());
+      },
+      zoomend: (e) => {
+        console.log("mapCenter", e.target.getCenter());
+        console.log("map bounds", e.target.getBounds());
+        setBounds(e.target.getBounds());
       },
     });
     return null;
@@ -32,9 +52,10 @@ const Map = ({ data }) => {
       <MapContainer
         center={[lat, lon]}
         zoom={13}
-        minZoom={10}
+        minZoom={13}
         scrollWheelZoom={true}
         style={{ height: "100vh", width: "100vw" }}
+        whenCreated={(map) => setBounds(map.getBounds())}
       >
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -53,7 +74,14 @@ const Map = ({ data }) => {
 const mapStateToProps = (state) => {
   return {
     data: state.map.data,
+    bounds: state.map.bounds,
   };
 };
 
-export default connect(mapStateToProps)(Map);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setBounds: (bounds) => dispatch(setBounds(bounds)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

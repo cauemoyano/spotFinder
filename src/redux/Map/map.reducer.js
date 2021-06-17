@@ -1,7 +1,8 @@
-import { INCREMENT, DECREMENT, SETMAPDATA } from "./map.types";
+import { INCREMENT, SETBOUNDS, SETMAPDATA } from "./map.types";
 
 const INITIAL_STATE = {
   data: {},
+  bounds: [],
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -9,8 +10,11 @@ const reducer = (state = INITIAL_STATE, action) => {
     case INCREMENT:
       return state;
 
-    case DECREMENT:
-      return state;
+    case SETBOUNDS:
+      return {
+        ...state,
+        bounds: action.payload,
+      };
 
     case SETMAPDATA:
       return {
