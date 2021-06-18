@@ -10,8 +10,9 @@ import { connect } from "react-redux";
 import { setBounds } from "../redux/Map/map.actions";
 
 import { getAttractions } from "../utils/getAttractions";
+import { checkOutBounds } from "../utils/checkOutBounds";
 
-const Map = ({ data, setBounds, bounds }) => {
+const Map = ({ data, setBounds, bounds, broadenBounds }) => {
   const { lat, lon } = data;
   const positions = [
     /*  [51.505, -0.09],
@@ -21,11 +22,18 @@ const Map = ({ data, setBounds, bounds }) => {
 
   useEffect(() => {
     if (bounds.length === 0) return;
+    if (!broadenBounds) {
+      getAttractions(bounds);
+    } else {
+      if (checkOutBounds(bounds, broadenBounds)) {
+        getAttractions(bounds);
+      }
+    }
     /* const {
       _northEast: { lat: maxLat, lng: maxLon },
       _southWest: { lat: minLat, lng: minLon },
     } = bounds; */
-    getAttractions(bounds);
+
     /* fetchData(
       `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&rate=3&format=geojson&limit=5000&apikey=5ae2e3f221c38a28845f05b6484f463aeb66bd736d2d3ecdb85a6368`
     ).then((data) => console.log(data)); */
@@ -75,6 +83,7 @@ const mapStateToProps = (state) => {
   return {
     data: state.map.data,
     bounds: state.map.bounds,
+    broadenBounds: state.map.broadenBounds,
   };
 };
 

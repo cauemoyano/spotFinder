@@ -1,8 +1,9 @@
-import { INCREMENT, SETMAPDATA, SETBOUNDS } from "./map.types";
+import { BROADENBOUNDS, SETMAPDATA, SETBOUNDS } from "./map.types";
 
-export const increaseCounter = () => {
+export const setBroadenBounds = (bounds) => {
   return {
-    type: INCREMENT,
+    type: BROADENBOUNDS,
+    payload: bounds,
   };
 };
 

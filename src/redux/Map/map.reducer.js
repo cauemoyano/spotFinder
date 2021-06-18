@@ -1,14 +1,18 @@
-import { INCREMENT, SETBOUNDS, SETMAPDATA } from "./map.types";
+import { BROADENBOUNDS, SETBOUNDS, SETMAPDATA } from "./map.types";
 
 const INITIAL_STATE = {
   data: {},
   bounds: [],
+  broadenBounds: null,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case INCREMENT:
-      return state;
+    case BROADENBOUNDS:
+      return {
+        ...state,
+        broadenBounds: action.payload,
+      };
 
     case SETBOUNDS:
       return {

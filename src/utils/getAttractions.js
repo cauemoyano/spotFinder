@@ -1,6 +1,11 @@
 import { fetchDataWithTimeout } from "./fetchDataWithTimeout";
 
+import { setBroadenBounds } from "../redux/Map/map.actions";
+
+import store from "../redux/store";
+
 export const getAttractions = async (bounds) => {
+  console.log("getattractions");
   const {
     _northEast: { lat: mxLat, lng: mxLon },
     _southWest: { lat: miLat, lng: miLon },
@@ -18,14 +23,18 @@ export const getAttractions = async (bounds) => {
   const broadMax = (coordinate) => {
     return coordinate + 0.3;
   };
-  console.log(minLon, maxLon, maxLat, minLat);
 
   minLon = broadMin(minLon);
   maxLon = broadMax(maxLon);
   maxLat = broadMax(maxLat);
   minLat = broadMin(minLat);
 
-  console.log(minLon, maxLon, maxLat, minLat);
+  store.dispatch(
+    setBroadenBounds({
+      _northEast: { lat: maxLat, lng: maxLon },
+      _southWest: { lat: minLat, lng: minLon },
+    })
+  );
 
   let result = [];
 
@@ -72,12 +81,7 @@ export const getAttractions = async (bounds) => {
         tiles.tile4.latMin,
         tiles.tile4.latMax
       );
-      const tempResult = [
-        ...(await tile1),
-        ...(await tile2),
-        ...(await tile3),
-        ...(await tile4),
-      ];
+      const tempResult = [...tile1, ...tile2, ...tile3, ...tile4];
 
       return tempResult;
     }

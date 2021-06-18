@@ -1,4 +1,4 @@
-export const INCREMENT = "INCREMENT";
+export const BROADENBOUNDS = "BROADENBOUNDS";
 
 export const SETBOUNDS = "SETBOUNDS";
 
