@@ -1,11 +1,13 @@
 import { fetchDataWithTimeout } from "./fetchDataWithTimeout";
 
-import { setBroadenBounds } from "../redux/Map/map.actions";
+import {
+  setBroadenBounds,
+  setBoundsAttractions,
+} from "../redux/Map/map.actions";
 
 import store from "../redux/store";
 
 export const getAttractions = async (bounds) => {
-  console.log("getattractions");
   const {
     _northEast: { lat: mxLat, lng: mxLon },
     _southWest: { lat: miLat, lng: miLon },
@@ -40,7 +42,7 @@ export const getAttractions = async (bounds) => {
 
   const checkAmount = async (minLon, maxLon, minLat, maxLat) => {
     const attractions = await fetchDataWithTimeout(
-      `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&rate=3&format=count&limit=15000&apikey=${process.env.REACT_APP_MAP_TOKEN}`
+      `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&kinds=adult%2Camusements%2Cbridges%2Cpyramids%2Ctriumphal_archs%2Cskyscrapers%2Cbell_towers%2Cclock_towers%2Cmuseums%2Cconcert_halls%2Copera_houses%2Cgardens_and_parks%2Ccastles%2Cmonuments%2Cgeological_formations%2Cnatural_springs%2Cnational_parks%2Cstadiums%2Cfoods&rate=3&format=count&limit=15000&apikey=${process.env.REACT_APP_MAP_TOKEN}`
     );
     return attractions;
   };
@@ -50,7 +52,7 @@ export const getAttractions = async (bounds) => {
 
     if (amount.count < 500) {
       const tempResult = await fetchDataWithTimeout(
-        `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&rate=3&format=json&limit=15000&apikey=${process.env.REACT_APP_MAP_TOKEN}`
+        `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&kinds=adult%2Camusements%2Cbridges%2Cpyramids%2Ctriumphal_archs%2Cskyscrapers%2Cbell_towers%2Cclock_towers%2Cmuseums%2Cconcert_halls%2Copera_houses%2Cgardens_and_parks%2Ccastles%2Cmonuments%2Cgeological_formations%2Cnatural_springs%2Cnational_parks%2Cstadiums%2Cfoods&rate=3&format=json&limit=15000&apikey=${process.env.REACT_APP_MAP_TOKEN}`
       );
       return await tempResult;
     } else {
@@ -128,13 +130,5 @@ export const getAttractions = async (bounds) => {
   };
   result = await handleSearch(minLon, maxLon, minLat, maxLat);
   result = await result;
-  console.log(result);
-  /* .then((attractions) => {
-    console.log(attractions);
-    if (attractions < 500) {
-      fetchData(
-        `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&rate=1&format=json&limit=5000&apikey=5ae2e3f221c38a28845f05b6484f463aeb66bd736d2d3ecdb85a6368`
-      ).then((data) => console.log(data));
-    }
-  }); */
+  store.dispatch(setBoundsAttractions(result));
 };

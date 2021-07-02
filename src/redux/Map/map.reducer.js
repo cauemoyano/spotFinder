@@ -1,9 +1,17 @@
-import { BROADENBOUNDS, SETBOUNDS, SETMAPDATA } from "./map.types";
+import {
+  BROADENBOUNDS,
+  SETBOUNDS,
+  SETMAPDATA,
+  SETBOUNDSATTRACTIONS,
+  SETVIEWPORTATTRACTIONS,
+} from "./map.types";
 
 const INITIAL_STATE = {
   data: {},
   bounds: [],
   broadenBounds: null,
+  broadenAttractions: null,
+  viewportAttractions: null,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -24,6 +32,17 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         data: action.payload,
+      };
+    case SETBOUNDSATTRACTIONS:
+      return {
+        ...state,
+        broadenAttractions: action.payload,
+      };
+
+    case SETVIEWPORTATTRACTIONS:
+      return {
+        ...state,
+        viewportAttractions: action.payload,
       };
 
     default:

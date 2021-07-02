@@ -5,10 +5,13 @@ import { Marker as MUMarker } from "react-leaflet";
 
 import PopUp from "../Map/PopUp";
 
-const Marker = ({ position, icon }) => {
+const Marker = ({ attraction, icon }) => {
+  const {
+    point: { lat, lon },
+  } = attraction;
   return (
-    <MUMarker position={position} icon={icon}>
-      <PopUp />
+    <MUMarker position={[lat, lon]} icon={icon}>
+      <PopUp attraction={attraction} />
     </MUMarker>
   );
 };

@@ -11,33 +11,33 @@ import { setBounds } from "../redux/Map/map.actions";
 
 import { getAttractions } from "../utils/getAttractions";
 import { checkOutBounds } from "../utils/checkOutBounds";
+import { defineViewportAttractions } from "../utils/defineViewportAttractions";
 
-const Map = ({ data, setBounds, bounds, broadenBounds }) => {
+const Map = ({
+  data,
+  setBounds,
+  bounds,
+  broadenBounds,
+  broadenAttractions,
+  viewportAttractions,
+}) => {
   const { lat, lon } = data;
-  const positions = [
-    /*  [51.505, -0.09],
-    [51.504, -0.09],
-    [51.504, -0.08], */
-  ];
-
-  useEffect(() => {
-    if (bounds.length === 0) return;
+  const defineAttractions = async () => {
+    console.log("defining attractions");
     if (!broadenBounds) {
-      getAttractions(bounds);
+      await getAttractions(bounds);
     } else {
       if (checkOutBounds(bounds, broadenBounds)) {
-        getAttractions(bounds);
+        await getAttractions(bounds);
       }
     }
-    /* const {
-      _northEast: { lat: maxLat, lng: maxLon },
-      _southWest: { lat: minLat, lng: minLon },
-    } = bounds; */
-
-    /* fetchData(
-      `https://api.opentripmap.com/0.1/en/places/bbox?lon_min=${minLon}&lon_max=${maxLon}&lat_min=${minLat}&lat_max=${maxLat}&rate=3&format=geojson&limit=5000&apikey=5ae2e3f221c38a28845f05b6484f463aeb66bd736d2d3ecdb85a6368`
-    ).then((data) => console.log(data)); */
-  }, [bounds]);
+  };
+  useEffect(() => {
+    if (bounds.length === 0) return;
+    defineAttractions().then(() => {
+      defineViewportAttractions(bounds, broadenAttractions);
+    });
+  }, [bounds, broadenAttractions]);
 
   const EventsComponent = () => {
     const map = useMapEvents({
@@ -54,7 +54,6 @@ const Map = ({ data, setBounds, bounds, broadenBounds }) => {
     });
     return null;
   };
-
   return (
     <div>
       <MapContainer
@@ -69,10 +68,16 @@ const Map = ({ data, setBounds, bounds, broadenBounds }) => {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
-        {positions.map((position, index) => {
-          return <Marker position={position} icon={iconCustom} key={index} />;
-        })}
+        {viewportAttractions &&
+          viewportAttractions.map((attraction) => {
+            return (
+              <Marker
+                attraction={attraction}
+                icon={iconCustom}
+                key={attraction.xid}
+              />
+            );
+          })}
         <EventsComponent />
       </MapContainer>
     </div>
@@ -84,6 +89,8 @@ const mapStateToProps = (state) => {
     data: state.map.data,
     bounds: state.map.bounds,
     broadenBounds: state.map.broadenBounds,
+    broadenAttractions: state.map.broadenAttractions,
+    viewportAttractions: state.map.viewportAttractions,
   };
 };
 

@@ -84,7 +84,7 @@ const SearchSuggest = ({ setData, handleChange, value, suggestions }) => {
       value={value}
       style={{ width: 300 }}
       renderInput={(params) => (
-        <TextField {...params} label="Combo box" variant="outlined" />
+        <TextField {...params} label="Select a city" variant="outlined" />
       )}
     />
   );

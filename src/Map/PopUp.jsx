@@ -7,12 +7,12 @@ import CustomPopUp from "../Map/CustomPopUp";
 
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
-const PopUp = () => {
-  const theme = createMuiTheme({ palette: { main: "#FB8C00" } });
+const PopUp = ({ attraction }) => {
+  const theme = createMuiTheme({ palette: { main: "#FFFFFF" } });
   return (
     <MUPopUp>
       <MuiThemeProvider theme={theme}>
-        <CustomPopUp />
+        <CustomPopUp attraction={attraction} />
       </MuiThemeProvider>
     </MUPopUp>
   );

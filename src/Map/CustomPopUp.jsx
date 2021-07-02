@@ -1,8 +1,18 @@
 import React from "react";
 
-const CustomPopUp = () => {
+const CustomPopUp = ({ attraction }) => {
+  const { name } = attraction;
   return (
-    <div style={{ width: "300px", height: "100px", background: "black" }}></div>
+    <div
+      style={{
+        fontSize: "22px",
+        width: "300px",
+        height: "100px",
+        background: "white",
+      }}
+    >
+      {name}
+    </div>
   );
 };
 
