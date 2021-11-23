@@ -4,6 +4,8 @@ import {
   SETMAPDATA,
   SETBOUNDSATTRACTIONS,
   SETVIEWPORTATTRACTIONS,
+  SETSHOWDETAILSMODAL,
+  SETATTRACTIONSDETAILS,
 } from "./map.types";
 
 const INITIAL_STATE = {
@@ -12,6 +14,8 @@ const INITIAL_STATE = {
   broadenBounds: null,
   broadenAttractions: null,
   viewportAttractions: null,
+  showDetailsModal: false,
+  attractionDetails: null,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -43,6 +47,13 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         viewportAttractions: action.payload,
+      };
+
+    case SETSHOWDETAILSMODAL:
+      return {
+        ...state,
+        showDetailsModal: action.payload.status,
+        attractionDetails: action.payload.data,
       };
 
     default:

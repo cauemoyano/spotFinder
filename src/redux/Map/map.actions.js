@@ -4,6 +4,8 @@ import {
   SETBOUNDS,
   SETBOUNDSATTRACTIONS,
   SETVIEWPORTATTRACTIONS,
+  SETSHOWDETAILSMODAL,
+  SETATTRACTIONSDETAILS,
 } from "./map.types";
 
 export const setBroadenBounds = (bounds) => {
@@ -35,6 +37,12 @@ export const setBoundsAttractions = (data) => {
 export const setViewportAttractions = (data) => {
   return {
     type: SETVIEWPORTATTRACTIONS,
+    payload: data,
+  };
+};
+export const setShowDetailsModal = (data) => {
+  return {
+    type: SETSHOWDETAILSMODAL,
     payload: data,
   };
 };

@@ -1,0 +1,57 @@
+import { TextField } from "@mui/material";
+import React from "react";
+import { styled } from "@mui/material/styles";
+
+const StyledTextField = styled(TextField)({
+  "& label.Mui-focused": {
+    color: "#66FCF1",
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#66FCF1",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#C5C6C7",
+    },
+    "&:hover fieldset": {
+      borderColor: "#C5C6C7",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#66FCF1",
+    },
+  },
+});
+
+const CustomTextField = ({
+  error = false,
+  helperText,
+  label,
+  type,
+  ...field
+}) => {
+  return (
+    <>
+      {error ? (
+        <StyledTextField
+          error
+          margin="normal"
+          label={label}
+          type={type}
+          {...field}
+          variant="outlined"
+          helperText={helperText}
+        />
+      ) : (
+        <StyledTextField
+          margin="normal"
+          label={label}
+          type={type}
+          {...field}
+          variant="outlined"
+        />
+      )}
+    </>
+  );
+};
+
+export default CustomTextField;

@@ -2,16 +2,32 @@ import "./App.css";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import {
-  createMuiTheme,
-  responsiveFontSizes,
-  ThemeProvider,
-} from "@material-ui/core/styles";
+import { responsiveFontSizes } from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import Map from "../pages/Map";
-import Home from "../pages/Home";
+import Map from "../views/Map/Map";
+import Home from "../views/Home/Home";
 
-let theme = createMuiTheme();
+let theme = createTheme({
+  palette: {
+    primary: {
+      main: "#66FCF1",
+    },
+
+    secondary: {
+      main: "#1F2833",
+    },
+  },
+  primaryDarker: {
+    main: "#45A29E",
+  },
+  dark: {
+    main: "#0B0C10",
+  },
+  light: {
+    main: "#C5C6C7",
+  },
+});
 theme = responsiveFontSizes(theme);
 
 function App() {

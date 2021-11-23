@@ -1,17 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 
-import { iconCustom } from "../Map/Icon";
+import { iconCustom } from "../../Map/Icon";
 
-import Marker from "../Map/Marker";
+import Marker from "../../Map/Marker";
 
 import { connect } from "react-redux";
-import { setBounds } from "../redux/Map/map.actions";
+import { setBounds } from "../../redux/Map/map.actions";
 
-import { getAttractions } from "../utils/getAttractions";
-import { checkOutBounds } from "../utils/checkOutBounds";
-import { defineViewportAttractions } from "../utils/defineViewportAttractions";
+import { getAttractions } from "../../utils/getAttractions";
+import { checkOutBounds } from "../../utils/checkOutBounds";
+import { defineViewportAttractions } from "../../utils/defineViewportAttractions";
+import { Container } from "@material-ui/core";
+import DetailsModal from "../../components/DetailsModal";
 
 const Map = ({
   data,
@@ -20,6 +22,7 @@ const Map = ({
   broadenBounds,
   broadenAttractions,
   viewportAttractions,
+  showDetailsModal,
 }) => {
   const { lat, lon } = data;
   const defineAttractions = async () => {
@@ -55,13 +58,13 @@ const Map = ({
     return null;
   };
   return (
-    <div>
+    <Container maxWidth="xl">
       <MapContainer
         center={[lat, lon]}
         zoom={13}
         minZoom={13}
         scrollWheelZoom={true}
-        style={{ height: "100vh", width: "100vw" }}
+        style={{ height: "100vh", width: "100%" }}
         whenCreated={(map) => setBounds(map.getBounds())}
       >
         <TileLayer
@@ -80,7 +83,8 @@ const Map = ({
           })}
         <EventsComponent />
       </MapContainer>
-    </div>
+      {showDetailsModal && <DetailsModal />}
+    </Container>
   );
 };
 
@@ -91,6 +95,7 @@ const mapStateToProps = (state) => {
     broadenBounds: state.map.broadenBounds,
     broadenAttractions: state.map.broadenAttractions,
     viewportAttractions: state.map.viewportAttractions,
+    showDetailsModal: state.map.showDetailsModal,
   };
 };
 

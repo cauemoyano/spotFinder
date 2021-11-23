@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import Controls from "./controls/controls";
+import React from "react";
+import Controls from "../../../components/controls/controls";
 
 const CitySelector = () => {
   return (

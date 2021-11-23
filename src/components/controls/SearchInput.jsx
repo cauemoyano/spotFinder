@@ -7,8 +7,9 @@ import { useHistory } from "react-router-dom";
 
 import { fetchData } from "../../utils/fetchData";
 
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "@mui/material/Autocomplete";
+import CustomTextField from "./CustomTextField";
+import { makeStyles } from "@material-ui/core";
 
 class SearchInput extends Component {
   constructor(props) {
@@ -50,9 +51,20 @@ class SearchInput extends Component {
     );
   }
 }
+const useStyles = makeStyles({
+  root: {
+    background: "rgba( 165, 165, 165, 0.15 )",
+    boxShadow: "0 4px 16px 0 rgba( 165, 165, 165, 0.2 )",
+    backdropFilter: "blur( 5px )",
+    WebkitDropFilter: "blur( 5px )",
+    borderRadius: "10px",
+    border: "1px solid rgba( 255, 255, 255, 0.18 )",
+  },
+});
 
 const SearchSuggest = ({ setData, handleChange, value, suggestions }) => {
   let history = useHistory();
+  const styles = useStyles();
 
   const handleOption = (option) => {
     if (option["display_place"]) {
@@ -67,8 +79,10 @@ const SearchSuggest = ({ setData, handleChange, value, suggestions }) => {
     return option;
   };
 
-  const handleClick = () => {
-    setData(suggestions[0]);
+  const handleClick = (e) => {
+    const city = e.target.innerText.split("-")[0].trim();
+    const option = suggestions.find((sug) => sug["display_place"] === city);
+    setData(option);
     history.push("/map");
   };
 
@@ -80,11 +94,15 @@ const SearchSuggest = ({ setData, handleChange, value, suggestions }) => {
         return handleOption(option);
       }}
       onInputChange={handleChange}
-      onChange={handleClick}
+      onChange={(e) => handleClick(e)}
       value={value}
       style={{ width: 300 }}
-      renderInput={(params) => (
-        <TextField {...params} label="Select a city" variant="outlined" />
+      renderInput={(fields) => (
+        <CustomTextField
+          {...fields}
+          label="Select a city"
+          className={styles.root}
+        />
       )}
     />
   );
