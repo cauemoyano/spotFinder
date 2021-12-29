@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
-
-import { iconCustom } from "../../Map/Icon";
+import { connect } from "react-redux";
+import { Container } from "@material-ui/core";
 
 import Marker from "../../Map/Marker";
-
-import { connect } from "react-redux";
+import { iconCustom, iconSelected } from "../../Map/Icon";
 import { setBounds } from "../../redux/Map/map.actions";
-
 import { getAttractions } from "../../utils/getAttractions";
 import { checkOutBounds } from "../../utils/checkOutBounds";
 import { defineViewportAttractions } from "../../utils/defineViewportAttractions";
-import { Container } from "@material-ui/core";
 import DetailsModal from "../../components/DetailsModal";
 
 const Map = ({
@@ -70,6 +67,11 @@ const Map = ({
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          eventHandlers={{
+            click: (e) => {
+              console.log("map clicked", e);
+            },
+          }}
         />
         {viewportAttractions &&
           viewportAttractions.map((attraction) => {
@@ -78,6 +80,7 @@ const Map = ({
                 attraction={attraction}
                 icon={iconCustom}
                 key={attraction.xid}
+                iconSelected={iconSelected}
               />
             );
           })}

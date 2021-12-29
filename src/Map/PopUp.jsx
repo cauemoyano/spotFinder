@@ -20,10 +20,10 @@ const PopUp = ({ attraction, setShowDetailsModal }) => {
   };
 
   return (
-    <MUPopUp onOpen={handleOpen} onClose={handleClose}>
-      <MuiThemeProvider theme={theme}>
+    <MUPopUp onOpen={handleOpen} onClose={handleClose} className="hidden">
+      {/* <MuiThemeProvider theme={theme}>
         <CustomPopUp attraction={attraction} />
-      </MuiThemeProvider>
+      </MuiThemeProvider> */}
     </MUPopUp>
   );
 };

@@ -1,0 +1,10 @@
+.app-wrapper {
+  background-color: black;
+}
+.detailsAttractionWrapper {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.detailsAttractionWrapper::-webkit-scrollbar {
+  display: none;
+}

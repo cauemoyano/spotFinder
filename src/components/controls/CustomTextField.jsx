@@ -22,36 +22,34 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-const CustomTextField = ({
-  error = false,
-  helperText,
-  label,
-  type,
-  ...field
-}) => {
-  return (
-    <>
-      {error ? (
-        <StyledTextField
-          error
-          margin="normal"
-          label={label}
-          type={type}
-          {...field}
-          variant="outlined"
-          helperText={helperText}
-        />
-      ) : (
-        <StyledTextField
-          margin="normal"
-          label={label}
-          type={type}
-          {...field}
-          variant="outlined"
-        />
-      )}
-    </>
-  );
-};
+const CustomTextField = React.forwardRef(
+  ({ error = false, helperText, label, type, ...field }, ref) => {
+    return (
+      <>
+        {error ? (
+          <StyledTextField
+            error
+            margin="normal"
+            label={label}
+            type={type}
+            {...field}
+            variant="outlined"
+            helperText={helperText}
+            ref={ref}
+          />
+        ) : (
+          <StyledTextField
+            margin="normal"
+            label={label}
+            type={type}
+            {...field}
+            variant="outlined"
+            ref={ref}
+          />
+        )}
+      </>
+    );
+  }
+);
 
 export default CustomTextField;

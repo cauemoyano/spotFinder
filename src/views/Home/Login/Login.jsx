@@ -6,6 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../../components/form/CustomInput";
+import axios from "axios";
+import { setUserInfo } from "../../../redux/User/user.actions";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -18,12 +21,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ setShowAuthPage }) => {
-  const { control, handleSubmit, errors } = useForm();
+const Login = ({ setShowAuthPage, setUser }) => {
+  const { control, handleSubmit, reset } = useForm();
   const [hasError, setHasError] = useState(false);
 
   const onSubmit = async (data) => {
-    console.log(data, errors);
+    try {
+      await axios.post("/api/v1/auth/login", data);
+      const user = await axios.get("/api/v1/users/");
+      reset();
+      setUser(user.data);
+      setShowAuthPage(null);
+    } catch (err) {
+      if (err.response?.data.message === "Invalid email") {
+        setHasError({ email: { message: "Invalid email" } });
+      }
+      console.log(err);
+    }
   };
   const onError = (errors, e) => setHasError(errors);
 
@@ -91,4 +105,10 @@ const Login = ({ setShowAuthPage }) => {
   );
 };
 
-export default Login;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUser: (data) => dispatch(setUserInfo(data)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Login);

@@ -12,11 +12,27 @@ let theme = createTheme({
   palette: {
     primary: {
       main: "#66FCF1",
+      dark: "#45A29E",
     },
-
     secondary: {
+      main: "#EC317F",
+    },
+    dark: {
+      main: "#0B0C10",
+      contrastText: "#fff",
+    },
+    primaryDarker: {
+      main: "#45A29E",
+    },
+    darkBlue: {
       main: "#1F2833",
     },
+    gray: {
+      main: "#C5C6C7",
+    },
+  },
+  darkBlue: {
+    main: "#1F2833",
   },
   primaryDarker: {
     main: "#45A29E",
@@ -32,7 +48,7 @@ theme = responsiveFontSizes(theme);
 
 function App() {
   return (
-    <div>
+    <div className="app-wrapper">
       <Router>
         <ThemeProvider theme={theme}>
           <Switch>
