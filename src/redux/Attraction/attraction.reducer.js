@@ -17,7 +17,7 @@ const INITIAL_STATE = {
   attractionDetails: null,
   deleteModal: false,
   editComment: null,
-  loadingData: false,
+  loadingData: true,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {

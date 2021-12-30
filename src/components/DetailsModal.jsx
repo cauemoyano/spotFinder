@@ -1,8 +1,7 @@
-import { Fab, Typography } from "@mui/material";
+import { Fab, Skeleton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
 import AttractionAddress from "./AttractionAddress";
@@ -18,6 +17,13 @@ import {
   toggleCommentModal,
 } from "../redux/Attraction/attraction.actions";
 import AttractionImage from "./AttractionImage";
+import TitleSkeleton from "./Skeletons/TitleSkeleton";
+import ReviewSkeleton from "./Skeletons/ReviewSkeleton";
+import AttractionAddressSkeleton from "./Skeletons/AttractionAddressSkeleton";
+import AttractionDescSkeleton from "./Skeletons/AttractionDescSkeleton";
+import GiveReviewSkeleton from "./Skeletons/GiveReviewSkeleton";
+import UserCommentsSkeleton from "./Skeletons/UserCommentsSkeleton";
+import CommentsSkeleton from "./Skeletons/CommentsSkeleton";
 
 const DetailsModal = ({
   attractionDetails: attraction,
@@ -25,6 +31,7 @@ const DetailsModal = ({
   getAttractionData,
   attractionMainData: data,
   loadingData,
+  user,
 }) => {
   const { name, xid } = attraction;
   /*   const [data, setData] = useState(null); */
@@ -82,17 +89,34 @@ const DetailsModal = ({
       id="detailsWrapper"
     >
       <AttractionImage data={data} name={name} loading={loadingData} />
-      <Typography variant="h5" py="1rem" align="center" color="primary.dark">
-        {name}
-      </Typography>
-      <Review />
-      {data && <AttractionAddress data={data} />}
-      {data && data["wikipedia_extracts"] && (
+      {loadingData ? (
+        <TitleSkeleton />
+      ) : (
+        <Typography variant="h5" py="1rem" align="center" color="primary.dark">
+          {name}
+        </Typography>
+      )}
+      {loadingData ? <ReviewSkeleton /> : <Review />}
+
+      {loadingData ? (
+        <AttractionAddressSkeleton />
+      ) : (
+        <AttractionAddress data={data} />
+      )}
+      {loadingData ? (
+        <AttractionDescSkeleton />
+      ) : (
         <AttractionDescription data={data} />
       )}
-      <GiveReview xid={xid} name={name} />
-      <UserComments />
-      <Comments />
+      {user &&
+        (loadingData ? (
+          <GiveReviewSkeleton />
+        ) : (
+          <GiveReview xid={xid} name={name} />
+        ))}
+      {user && (loadingData ? <UserCommentsSkeleton /> : <UserComments />)}
+      {loadingData ? <CommentsSkeleton /> : <Comments />}
+
       <Fab
         sx={{
           position: "absolute",
@@ -119,6 +143,7 @@ const mapStateToProps = (state) => {
     commentModal: state.attraction.commentModal,
     attractionMainData: state.attraction.attractionMainData,
     loadingData: state.attraction.loadingData,
+    user: state.user.user,
   };
 };
 

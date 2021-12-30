@@ -10,7 +10,10 @@ const Comments = ({ attractionUsersData, user }) => {
 
   useEffect(() => {
     if (attractionUsersData) {
-      comments = getOtherUsersComments(attractionUsersData.comments, user._id);
+      comments = getOtherUsersComments(
+        attractionUsersData.comments,
+        user ? user._id : ""
+      );
     }
   }, [attractionUsersData]);
 
