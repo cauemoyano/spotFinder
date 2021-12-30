@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const MessageComponent = ({ message, setMessage, text }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -24,7 +24,7 @@ const MessageComponent = ({ message, setMessage, text }) => {
       open={open}
       autoHideDuration={4000}
       anchorOrigin={{
-        vertical: "center",
+        vertical: "bottom",
         horizontal: "right",
       }}
       onClose={handleClose}

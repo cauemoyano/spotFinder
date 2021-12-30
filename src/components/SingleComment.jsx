@@ -15,8 +15,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SingleComment = () => {
+const SingleComment = ({ userName, body, date }) => {
   const styles = useStyles();
+
+  const renderDate = (d) => {
+    const date = new Date(d);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${day}/${month}/${year.toString().slice(2)}`;
+  };
   return (
     <Box py={1}>
       <Box display="flex">
@@ -36,8 +44,7 @@ const SingleComment = () => {
           sx={{ width: "85%" }}
           className={styles.comment}
         >
-          <span>10/12/2021</span> <span>Bob said:</span> It’s a very nice place
-          to visit and I'd highly recommend it.
+          <span>{renderDate(date)}</span> <span>{userName} said:</span> {body}
         </Typography>
       </Box>
     </Box>

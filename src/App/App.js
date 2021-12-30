@@ -29,6 +29,7 @@ let theme = createTheme({
     },
     gray: {
       main: "#C5C6C7",
+      dark: "#757575",
     },
   },
   darkBlue: {

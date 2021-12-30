@@ -7,20 +7,20 @@ import { connect } from "react-redux";
 import { useRef } from "react";
 
 import {
-  setCommentContent,
+  handleCommentSubmitted,
   toggleCommentModal,
 } from "../redux/Attraction/attraction.actions";
 import { useState } from "react";
-import DeleteModal from "./DeleteModal";
 import MessageComponent from "./MessageComponent";
-import { postComment } from "../utils/attractionApis";
+import { postComment, putComment } from "../utils/attractionApis";
 
 const CommentInput = ({
   commentModal,
   toggleComments,
   commentContent,
-  setCommentContent,
   attractionDetails,
+  editComment,
+  handleCommentSubmitted,
 }) => {
   const commentWrapper = useRef();
   const commentInputRef = useRef();
@@ -41,28 +41,32 @@ const CommentInput = ({
   }, [commentModal]);
 
   const handleCancel = () => {
-    toggleComments();
+    toggleComments(false);
     setInput("");
-    setCommentContent("");
   };
 
   const handleChange = (e) => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
-    postComment(input, xid, name)
-      .then((response) => {
-        console.log(response);
-        setLoading(false);
-        setMessage("success");
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-        setMessage("error");
-      });
+    let response;
+    try {
+      if (editComment) {
+        response = await putComment(input, xid, name, editComment);
+      } else {
+        response = await postComment(input, xid, name);
+      }
+      handleCommentSubmitted(response.data);
+      setMessage("success");
+    } catch (error) {
+      console.log(error);
+
+      setMessage("error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const textMessages = {
@@ -126,7 +130,6 @@ const CommentInput = ({
           )}
         </Box>
       </Box>
-      <DeleteModal />
       <MessageComponent
         message={message}
         setMessage={setMessage}
@@ -141,13 +144,14 @@ const mapStateToProps = (state) => {
     commentModal: state.attraction.commentModal,
     commentContent: state.attraction.commentContent,
     attractionDetails: state.map.attractionDetails,
+    editComment: state.attraction.editComment,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleComments: () => dispatch(toggleCommentModal()),
-    setCommentContent: (data) => dispatch(setCommentContent(data)),
+    toggleComments: (state) => dispatch(toggleCommentModal(state)),
+    handleCommentSubmitted: (data) => dispatch(handleCommentSubmitted(data)),
   };
 };
 

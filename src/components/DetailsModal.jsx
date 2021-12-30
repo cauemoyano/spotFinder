@@ -1,4 +1,4 @@
-import { Fab, Slide, TextField, Typography } from "@mui/material";
+import { Fab, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import axios from "axios";
@@ -13,36 +13,26 @@ import Comments from "./Comments";
 import UserComments from "./UserComments";
 import { useRef } from "react";
 import {
+  getAttractionData,
   setCommentContent,
   toggleCommentModal,
 } from "../redux/Attraction/attraction.actions";
+import AttractionImage from "./AttractionImage";
 
 const DetailsModal = ({
   attractionDetails: attraction,
   toggleComments,
-  setCommentContent,
-  commentModal,
+  getAttractionData,
+  attractionMainData: data,
+  loadingData,
 }) => {
   const { name, xid } = attraction;
-  const [data, setData] = useState(null);
-  const [attractionUsersData, setAttractionUsersData] = useState(null);
+  /*   const [data, setData] = useState(null); */
   const detailsWrapperRef = useRef();
   const scrollRef = useRef();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.opentripmap.com/0.1/en/places/xid/${xid}?apikey=${process.env.REACT_APP_MAP_TOKEN}`
-      )
-      .then((res) => {
-        setData(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-    axios
-      .get(`/api/v1/attraction/${xid}`)
-      .then((res) => setAttractionUsersData(res.data))
-      .catch((err) => console.log(err));
+    getAttractionData(xid);
   }, [xid]);
 
   const resizeObserver = new ResizeObserver((entries) => {
@@ -69,11 +59,7 @@ const DetailsModal = ({
       if (detailsWrapperRef.current) {
         resizeObserver.unobserve(detailsWrapperRef.current);
       }
-      if (commentModal) {
-        toggleComments();
-      }
-
-      setCommentContent("");
+      toggleComments(false);
     };
   }, []);
 
@@ -95,14 +81,7 @@ const DetailsModal = ({
       ref={detailsWrapperRef}
       id="detailsWrapper"
     >
-      {data && (
-        <img
-          src={data.preview.source}
-          width={"100%"}
-          style={{ maxHeight: "40vh" }}
-          alt={name}
-        />
-      )}
+      <AttractionImage data={data} name={name} loading={loadingData} />
       <Typography variant="h5" py="1rem" align="center" color="primary.dark">
         {name}
       </Typography>
@@ -135,8 +114,11 @@ const DetailsModal = ({
 
 const mapStateToProps = (state) => {
   return {
+    attractionUsersData: state.attraction.attractionUsersData,
     attractionDetails: state.map.attractionDetails,
     commentModal: state.attraction.commentModal,
+    attractionMainData: state.attraction.attractionMainData,
+    loadingData: state.attraction.loadingData,
   };
 };
 
@@ -144,6 +126,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toggleComments: (data) => dispatch(toggleCommentModal(data)),
     setCommentContent: (data) => dispatch(setCommentContent(data)),
+    getAttractionData: (data) => dispatch(getAttractionData(data)),
   };
 };
 

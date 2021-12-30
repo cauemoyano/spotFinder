@@ -10,10 +10,13 @@ import { homeStyle } from "../../styles/home";
 import Login from "../Home/Login/Login";
 import Registration from "../Home/Registration/Registration";
 import Box from "@mui/material/Box";
+import axios from "axios";
+import { connect } from "react-redux";
+import { setUserInfo } from "../../redux/User/user.actions";
 
 const useStyles = makeStyles(homeStyle);
 
-const Home = () => {
+const Home = ({ setUser }) => {
   const homeStyle = useStyles();
   const [showAuthPage, setShowAuthPage] = useState(false);
   const wrapHomeRef = useRef();
@@ -54,6 +57,10 @@ const Home = () => {
       });
     }
   };
+
+  useEffect(() => {
+    axios.get("/api/v1/users").then((res) => setUser(res.data));
+  }, []);
 
   useEffect(() => {
     if (wrapHomeRef.current.classList.contains("active")) {
@@ -133,4 +140,10 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUser: (data) => dispatch(setUserInfo(data)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Home);

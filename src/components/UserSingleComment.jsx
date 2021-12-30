@@ -5,32 +5,32 @@ import { Box, IconButton } from "@mui/material";
 
 import SingleComment from "./SingleComment";
 import {
-  setCommentContent,
   setDeleteModal,
-  toggleCommentModal,
+  setEditComment,
 } from "../redux/Attraction/attraction.actions";
 import { connect } from "react-redux";
 
 const UserSingleComment = ({
-  setCommentContent,
-  toggleComments,
   toggleDeleteModal,
+  toggleEditComment,
+  commentModal,
+  comment,
 }) => {
-  //comment data comes as props
-  const text = `It’s a very nice place to visit and I'd highly recommend it.`;
+  const { _id: id, body: text } = comment;
+
   const handleEdit = () => {
-    setCommentContent(text);
-    toggleComments();
+    toggleEditComment(text, id);
   };
   return (
     <Box>
-      <SingleComment />
+      <SingleComment {...comment} />
       <Box display="flex" justifyContent="end">
         <IconButton
           color="darkBlue"
           aria-label="edit comment"
           variant="outlined"
           onClick={handleEdit}
+          disabled={commentModal}
         >
           <EditIcon fontSize="large" />
         </IconButton>
@@ -38,7 +38,8 @@ const UserSingleComment = ({
           color="error"
           aria-label="remove comment"
           variant="outlined"
-          onClick={toggleDeleteModal}
+          onClick={() => toggleDeleteModal(null, id)}
+          disabled={commentModal}
         >
           <RemoveCircleOutlineIcon fontSize="large" />
         </IconButton>
@@ -49,10 +50,13 @@ const UserSingleComment = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCommentContent: (data) => dispatch(setCommentContent(data)),
-    toggleComments: () => dispatch(toggleCommentModal()),
-    toggleDeleteModal: () => dispatch(setDeleteModal()),
+    toggleEditComment: (data, id) => dispatch(setEditComment(data, id)),
+    toggleDeleteModal: (data, id) => dispatch(setDeleteModal(data, id)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(UserSingleComment);
+const mapStateToProps = (state) => {
+  return { commentModal: state.attraction.commentModal };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserSingleComment);
